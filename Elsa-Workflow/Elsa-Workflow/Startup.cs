@@ -1,3 +1,4 @@
+using Elsa.Activities.Http.Extensions;
 using Elsa_Workflow.Configurations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,11 +22,11 @@ namespace Elsa_Workflow
         {
             services.AddControllers();
 
-            // Configuring swagger
+            // Configuring Swagger
             SwaggerConfiguration.ConfigureSwagger(services);
 
-            // Configuring elsa
-
+            // Configuring Elsa
+            ElsaConfiguration.ConfigureElsa(services, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +46,9 @@ namespace Elsa_Workflow
                 config.SwaggerEndpoint("/swagger/v1/swagger.json", "Elsa Workflow");
                 config.RoutePrefix = string.Empty;
             });
+
+            // Add Elsa's middleware to handle HTTP requests to workflows.  
+            app.UseHttpActivities();
 
             app.UseHttpsRedirection();
 

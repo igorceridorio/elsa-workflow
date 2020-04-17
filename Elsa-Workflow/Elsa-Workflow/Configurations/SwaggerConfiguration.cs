@@ -11,7 +11,7 @@ namespace Elsa_Workflow.Configurations
 
             services.AddSwaggerGen(config =>
             {
-                config.SwaggerDoc("v1", new OpenApiInfo { Title = "POC MassTransit Courier", Version = "v1" });
+                config.SwaggerDoc("v1", new OpenApiInfo { Title = "Elsa Workflow", Version = "v1" });
                 // TODO config.ExampleFilters();
             });
         }
