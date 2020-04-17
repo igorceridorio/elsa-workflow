@@ -23,6 +23,9 @@ namespace Elsa_Workflow
 
             // Configuring swagger
             SwaggerConfiguration.ConfigureSwagger(services);
+
+            // Configuring elsa
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
