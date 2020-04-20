@@ -1,4 +1,7 @@
-﻿using Elsa_Workflow.Models;
+﻿using Elsa.Activities.Workflows.Extensions;
+using Elsa.Models;
+using Elsa.Services;
+using Elsa_Workflow.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -11,27 +14,30 @@ namespace Elsa_Workflow.Controllers
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
+        private IWorkflowInvoker _workflowInvoker;
 
-        public UserController(ILogger<UserController> logger)
+        public UserController(
+            ILogger<UserController> logger,
+            IWorkflowInvoker workflowInvoker)
         {
             _logger = logger;
+            _workflowInvoker = workflowInvoker;
         }
 
         [Route("register")]
         [HttpPost]
         public async Task<IActionResult> UserRegistration(RegistrationModel request)
         {
-            // TODO
             _logger.LogInformation("Registering new user...");
-            return StatusCode(StatusCodes.Status200OK);
-        }
+            _logger.LogInformation($"Name: {request.Name}");
+            _logger.LogInformation($"Email: {request.Email}");
 
-        [Route("activate/{userId}")]
-        [HttpPost]
-        public async Task<IActionResult> ActivateUser(string userId)
-        {
-            // TODO
-            _logger.LogInformation($"Activating user {userId}...");
+            // Sets the variables that will be passed to the workflow
+            var input = new Variables();
+            input.SetVariable("RegistrationModel", request);
+
+            // Triggers the workflow execution (same name as registered in the Dashboard)
+            await _workflowInvoker.TriggerSignalAsync("RegisterUser", input);
             return StatusCode(StatusCodes.Status200OK);
         }
     }
