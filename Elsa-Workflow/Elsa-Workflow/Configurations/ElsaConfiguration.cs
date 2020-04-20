@@ -2,7 +2,12 @@
 using Elsa.Activities.Http.Extensions;
 using Elsa.Activities.Timers.Extensions;
 using Elsa.Dashboard.Extensions;
+using Elsa.Extensions;
 using Elsa.Persistence.MongoDb.Extensions;
+using Elsa_Workflow.Extensions;
+using Elsa_Workflow.Handlers;
+using Elsa_Workflow.Models;
+using Elsa_Workflow.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -26,14 +31,14 @@ namespace Elsa_Workflow.Configurations
                 // Add the activities that will be used
                 .AddEmailActivities(options => options.Bind(configuration.GetSection("Elsa:Smtp")))
                 .AddHttpActivities(options => options.Bind(configuration.GetSection("Elsa:Http")))
-                .AddTimerActivities(options => options.Bind(configuration.GetSection("Elsa:Timers")));
-                //.AddUserActivities
+                .AddTimerActivities(options => options.Bind(configuration.GetSection("Elsa:Timers")))
+                .AddUserActivities()
                 // Add the password hasher service
-                //.AddSingleton<IPasswordHasher, PasswordHasher>()
+                .AddSingleton<IPasswordHasher, PasswordHasher>()
                 // Add a MongoDB collection
-                // .AddMongoDbCollection<User>("Users")
+                .AddMongoDbCollection<User>("Users")
                 // Add liquid handler
-                //.AddNotificationHandlers(typeof(LiquidConfigurationHandler))
+                .AddNotificationHandlers(typeof(LiquidConfigurationHandler));
         }
     }
 }
