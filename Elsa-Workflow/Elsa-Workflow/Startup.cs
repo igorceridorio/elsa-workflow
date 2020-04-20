@@ -1,4 +1,5 @@
 using Elsa.Activities.Http.Extensions;
+using Elsa_Workflow.Business;
 using Elsa_Workflow.Configurations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,23 +11,27 @@ namespace Elsa_Workflow
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMvc();
 
-            // Configuring Swagger
-            SwaggerConfiguration.ConfigureSwagger(services);
+            // Configuring Business
+            services.AddScoped<IUserBusiness, UserBusiness>();
 
             // Configuring Elsa
             ElsaConfiguration.ConfigureElsa(services, Configuration);
+
+            // Configuring Swagger
+            SwaggerConfiguration.ConfigureSwagger(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +42,12 @@ namespace Elsa_Workflow
                 app.UseDeveloperExceptionPage();
             }
 
+            // Add this configuration to enable Elsa's CSS an JS dashboard loading on startup
+            app.UseStaticFiles();
+
+            // Add Elsa's middleware to handle HTTP requests to workflows 
+            app.UseHttpActivities();
+
             // Enabling Swagger
             app.UseSwagger();
 
@@ -46,14 +57,6 @@ namespace Elsa_Workflow
                 config.SwaggerEndpoint("/swagger/v1/swagger.json", "Elsa Workflow");
                 config.RoutePrefix = string.Empty;
             });
-
-            // Add Elsa's middleware to handle HTTP requests to workflows 
-            app.UseHttpActivities();
-
-            // Add this configuration to enable Elsa's CSS an JS dashboard loading on startup
-            app.UseStaticFiles();
-
-            app.UseHttpsRedirection();
 
             app.UseRouting();
 

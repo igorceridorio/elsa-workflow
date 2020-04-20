@@ -1,0 +1,37 @@
+﻿using Elsa.Activities.Workflows.Extensions;
+using Elsa.Models;
+using Elsa.Services;
+using Elsa_Workflow.Models;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Elsa_Workflow.Business
+{
+    public class UserBusiness : IUserBusiness
+    {
+        private readonly ILogger<UserBusiness> _logger;
+        //private readonly IWorkflowInvoker _workflowInvoker;
+
+        public UserBusiness(
+            ILogger<UserBusiness> logger)
+        {
+            _logger = logger;
+            //_workflowInvoker = workflowInvoker;
+        }
+
+        public async Task UserRegistration(RegistrationModel request)
+        {
+            _logger.LogInformation("Triggering RegisterUser signal...");
+
+            //// Sets the variables that will be passed to the workflow
+            //var input = new Variables();
+            //input.SetVariable("RegistrationModel", request);
+
+            //// Triggers the workflow execution (same name as registered in the Dashboard)
+            //await _workflowInvoker.TriggerSignalAsync("RegisterUser", input);
+        }
+    }
+}

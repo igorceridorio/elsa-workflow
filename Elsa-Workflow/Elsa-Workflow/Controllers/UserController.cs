@@ -1,6 +1,7 @@
 ﻿using Elsa.Activities.Workflows.Extensions;
 using Elsa.Models;
 using Elsa.Services;
+using Elsa_Workflow.Business;
 using Elsa_Workflow.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,14 +15,14 @@ namespace Elsa_Workflow.Controllers
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
-        private IWorkflowInvoker _workflowInvoker;
+        private IUserBusiness _userBusiness;
 
         public UserController(
             ILogger<UserController> logger,
-            IWorkflowInvoker workflowInvoker)
+            IUserBusiness userBusiness)
         {
             _logger = logger;
-            _workflowInvoker = workflowInvoker;
+            _userBusiness = userBusiness;
         }
 
         [Route("register")]
@@ -29,15 +30,12 @@ namespace Elsa_Workflow.Controllers
         public async Task<IActionResult> UserRegistration(RegistrationModel request)
         {
             _logger.LogInformation("Registering new user...");
-            _logger.LogInformation($"Name: {request.Name}");
-            _logger.LogInformation($"Email: {request.Email}");
+            _logger.LogInformation($"name: {request.Name}");
+            _logger.LogInformation($"email: {request.Email}");
 
-            // Sets the variables that will be passed to the workflow
-            var input = new Variables();
-            input.SetVariable("RegistrationModel", request);
+            // Calls business that triggers workflow start signal execution
+            await _userBusiness.UserRegistration(request);
 
-            // Triggers the workflow execution (same name as registered in the Dashboard)
-            await _workflowInvoker.TriggerSignalAsync("RegisterUser", input);
             return StatusCode(StatusCodes.Status200OK);
         }
     }

@@ -17,7 +17,6 @@ namespace Elsa_Workflow.Configurations
     {
         public static void ConfigureElsa(IServiceCollection services, IConfiguration configuration)
         {
-            // TODO: missing configs yet to be finished
             services
                 // Add Elsa services
                 .AddElsa(
