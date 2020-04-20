@@ -13,25 +13,26 @@ namespace Elsa_Workflow.Business
     public class UserBusiness : IUserBusiness
     {
         private readonly ILogger<UserBusiness> _logger;
-        //private readonly IWorkflowInvoker _workflowInvoker;
+        private readonly IWorkflowInvoker _workflowInvoker;
 
         public UserBusiness(
-            ILogger<UserBusiness> logger)
+            ILogger<UserBusiness> logger,
+            IWorkflowInvoker workflowInvoker)
         {
             _logger = logger;
-            //_workflowInvoker = workflowInvoker;
+            _workflowInvoker = workflowInvoker;
         }
 
         public async Task UserRegistration(RegistrationModel request)
         {
             _logger.LogInformation("Triggering RegisterUser signal...");
 
-            //// Sets the variables that will be passed to the workflow
-            //var input = new Variables();
-            //input.SetVariable("RegistrationModel", request);
+            // Sets the variables that will be passed to the workflow
+            var input = new Variables();
+            input.SetVariable("RegistrationModel", request);
 
-            //// Triggers the workflow execution (same name as registered in the Dashboard)
-            //await _workflowInvoker.TriggerSignalAsync("RegisterUser", input);
+            // Triggers the workflow execution (same name as registered in the Dashboard)
+            await _workflowInvoker.TriggerSignalAsync("RegisterUser", input);
         }
     }
 }
