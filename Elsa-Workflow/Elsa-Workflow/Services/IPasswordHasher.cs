@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Elsa_Workflow.Services
 {
-    interface IPasswordHasher
+    public interface IPasswordHasher
     {   
         HashedPassword HashPassword(string password);
 
