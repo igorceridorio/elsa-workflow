@@ -47,8 +47,11 @@ namespace Elsa_Workflow
                 config.RoutePrefix = string.Empty;
             });
 
-            // Add Elsa's middleware to handle HTTP requests to workflows.  
+            // Add Elsa's middleware to handle HTTP requests to workflows 
             app.UseHttpActivities();
+
+            // Add this configuration to enable Elsa's CSS an JS dashboard loading on startup
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 
