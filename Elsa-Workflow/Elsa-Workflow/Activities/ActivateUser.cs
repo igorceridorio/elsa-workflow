@@ -40,7 +40,7 @@ namespace Elsa_Workflow.Activities
 
             if (user == null)
             {
-                return Outcome("Not found");
+                return Outcome("Not Found");
             }
 
             // Updates user info on db
