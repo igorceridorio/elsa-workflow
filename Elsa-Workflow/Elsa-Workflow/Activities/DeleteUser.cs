@@ -5,6 +5,7 @@ using Elsa.Results;
 using Elsa.Services;
 using Elsa.Services.Models;
 using Elsa_Workflow.Models;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -17,10 +18,14 @@ namespace Elsa_Workflow.Activities
     [ActivityDefinition(Category = "Users", Description = "Delete a User", Icon = "fas fa-user-minus", Outcomes = new[] { OutcomeNames.Done, "Not Found" })]
     public class DeleteUser : Activity
     {
+        private readonly ILogger<DeleteUser> _logger;
         private readonly IMongoCollection<User> _store;
 
-        public DeleteUser(IMongoCollection<User> store)
+        public DeleteUser(
+            ILogger<DeleteUser> logger,
+            IMongoCollection<User> store)
         {
+            _logger = logger;
             _store = store;
         }
 
@@ -37,7 +42,15 @@ namespace Elsa_Workflow.Activities
             var userId = await context.EvaluateAsync(UserId, cancellationToken);
             var result = await _store.DeleteOneAsync(x => x.Id == userId, cancellationToken);
 
-            return result.DeletedCount == 0 ? Outcome("Not Found") : Done();
+            if (result.DeletedCount == 0)
+            {
+                _logger.LogError($"User {userId} could not be deleted");
+                return Outcome("Not found");
+            } else
+            {
+                _logger.LogInformation($"User {userId} succesfully deleted");
+                return Done();
+            }
         }
     }
 }
