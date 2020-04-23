@@ -7,7 +7,7 @@ Implementation based on [this tutorial](https://medium.com/@sipkeschoorstra/buil
 
 **Before running:**
 
-- This implementation uses a mongoDB connection.  The connection URL can be configured in `appsettings.json`. Make sure to adjust it before running the application
+- This implementation uses a mongoDB connection.  The connection URL can be configured in `appsettings.json`. Make sure to adjust it before running the application.
 
 - Workflow designed for this example can be found inside `/Workflows` folder. After running the project, it is necessary first to import the workflow definition through Elsa's Dashboard interface. An example of this workflow is attached with the `json` file inside this same folder.
 
@@ -23,6 +23,6 @@ Implementation based on [this tutorial](https://medium.com/@sipkeschoorstra/buil
   "repeatPassword": "123"
 }'`
 
-- Elsa's Dashboard runs on the same por the applications runs, and can be accessed under the path `/elsa/home`.
+- Elsa's Dashboard runs on the same port the applications runs, and can be accessed under the path `/elsa/home`.
 
 [Elsa's Project.](https://elsa-workflows.github.io/elsa-core/ "Elsa's Project.")
